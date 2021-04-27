@@ -13,10 +13,10 @@ fn main() {
 }
 
 fn sum_line(line: String) -> i64 {
-    let fields_iterator = line.split('|').map(str::trim);
+    let fields_iterator = line.split('|'); //.map(str::trim)
     let mut sum: i64 = 0;
     for text in fields_iterator {
-        sum += text.parse::<i64>().unwrap();
+        sum += text.trim().parse::<i64>().unwrap();
     }
     return sum;
 }
