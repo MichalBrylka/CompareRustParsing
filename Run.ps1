@@ -27,10 +27,30 @@ function RunRust([hashtable] $times) {
     $times.Add("Rust", $sw.Elapsed.TotalSeconds)
 }
 
+
+function RunJava([hashtable] $times) {
+    Set-Location .\ParseJava\
+    javac -d .\target\ .\src\main\java\simpleParse\App.java
+
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    java.exe -cp '.\target\' 'simpleParse.App' $iterations "$numbers"
+    $sw.Stop()
+    $times.Add("Java", $sw.Elapsed.TotalSeconds)
+   
+   
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    java.exe -cp '.\target\' 'simpleParse.App' $iterations "$numbers" "--stream"
+    $sw.Stop()
+    $times.Add("Java(streams)", $sw.Elapsed.TotalSeconds)
+
+    Set-Location ..   
+}
+
 Clear-Host
 [hashtable] $times = @{}
 RunCs($times)
 RunRust($times)
+RunJava($times)
 
 $times | Format-Table Name, @{Label = "Time"; Expression = { $_.Value.ToString("0.####") } }
 
