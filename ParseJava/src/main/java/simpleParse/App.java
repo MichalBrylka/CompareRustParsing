@@ -31,9 +31,9 @@ public final class App {
         long memory = runtime.totalMemory() - runtime.freeMemory();
         System.out.println("Used memory is: " + bytesToMegabytes(memory) + " MiB");
 
-        runtime.gc();
-        memory = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Used memory is: " + bytesToMegabytes(memory) + " MiB");
+        // runtime.gc();
+        // memory = runtime.totalMemory() - runtime.freeMemory();
+        // System.out.println("Used memory is: " + bytesToMegabytes(memory) + " MiB");
     }
 
     private static final long MEGABYTE = 1024L * 1024L;
@@ -52,12 +52,15 @@ public final class App {
     }
 
     static long SumLinePattern(String text, Pattern pattern) {
-        long result = 0L;
-        Iterator<String> iter = pattern.splitAsStream(text).iterator();
+        long result = pattern.splitAsStream(text).map(element -> Long.parseLong(element.trim())).reduce(0L,
+                (a, b) -> a + b);
 
-        while (iter.hasNext()) {
-            result += Long.parseLong(iter.next().trim());
-        }
+        /*
+         * long result = 0L; Iterator<String> iter =
+         * pattern.splitAsStream(text).iterator();
+         * 
+         * while (iter.hasNext()) { result += Long.parseLong(iter.next().trim()); }
+         */
         return result;
     }
 }
